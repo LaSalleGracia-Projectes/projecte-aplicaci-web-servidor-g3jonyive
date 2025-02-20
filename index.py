@@ -5,6 +5,7 @@ from utils.utils import log
 
 try:
     with app.app_context():
+        import models
         db.create_all()
 except Exception as e:
     log(f"Error al conectar con la base de datos: {e}")

@@ -17,6 +17,7 @@ app.register_blueprint(api)
 
 @app.before_request
 def create_tables():
+    import models
     db.create_all()
 
 @app.errorhandler(404)

@@ -6,3 +6,8 @@ from .specialization import Specialization
 from .user import User
 from .post import Post
 from .like import Like
+from .category_post import CategoryPost
+from .comment import Comment
+from .company_user import CompanyUser
+from .payment import Payment
+from .specialization_user import SpecializationUser

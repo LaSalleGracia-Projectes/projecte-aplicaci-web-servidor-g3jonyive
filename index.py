@@ -1,5 +1,5 @@
 from app import app
-from config import DEBUG
+from config import DEBUG, PORT
 from utils.db import db
 from utils.utils import log
 
@@ -12,4 +12,4 @@ except Exception as e:
     exit()
 
 if __name__ == '__main__':
-    app.run(debug=DEBUG, host="0.0.0.0")
+    app.run(debug=DEBUG, host="0.0.0.0", port=PORT)

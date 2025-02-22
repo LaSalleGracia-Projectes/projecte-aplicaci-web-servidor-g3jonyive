@@ -3,6 +3,8 @@ from flask_cors import CORS
 from config import DATABASE_CONNECTION_URI, DEBUG
 from routes import *
 from utils.db import db
+from utils.exceptions import InternalServerError, PageNotFound, MethodNotAllowed
+from utils.utils import make_error_response
 
 app = Flask(__name__)
 
@@ -22,24 +24,18 @@ def create_tables():
         db.create_all()
 
 @app.errorhandler(404)
-def page_not_found(error):
-    response = {"error": f"Page '{request.path}' not found"}
-    if DEBUG:
-        response['details'] = str(error)
-    return jsonify(response), 404
+def page_not_found(error: Exception):
+    response, status = make_error_response(PageNotFound(request.path))
+    return jsonify(response), status
 
 
 @app.errorhandler(405)
-def method_not_allowed(error):
-    response = {"error": "Method not allowed"}
-    if DEBUG:
-        response['details'] = str(error)
-    return jsonify(response), 405
+def method_not_allowed(error: Exception):
+    response, status = make_error_response(MethodNotAllowed())
+    return jsonify(response), status
 
 
 @app.errorhandler(Exception)
-def handle_exception(error):
-    response = {"error": "Internal server error"}
-    if DEBUG:
-        response['details'] = str(error)
-    return jsonify(response), 500
+def handle_exception(error: Exception):
+    response, status = make_error_response(InternalServerError(str(error)))
+    return jsonify(response), status

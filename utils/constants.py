@@ -1,1 +1,6 @@
-ERROR_RESPONSE = {"error": "Has occurred an error"}
+ERROR_RESPONSE = "Has occurred an error"
+BODY_REQUIRED = "The body must be a JSON" 
+INTERNAL_SERVER_ERROR = "Internal server error"
+METHOD_NOT_ALLOWED = "Method not allowed"
+UNAUTHORIZED_ERROR = "Unauthorized"
+VALIDATION_ERROR = "Validation error"

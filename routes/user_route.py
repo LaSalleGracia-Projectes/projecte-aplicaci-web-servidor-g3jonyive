@@ -1,6 +1,7 @@
 from flask import Blueprint, jsonify, request
 import controllers.user_controller as controller
 from utils.utils import make_error_response
+from utils.exceptions import BadRequestException
 
 
 user = Blueprint(name="user", import_name=__name__, url_prefix="/api/user")
@@ -23,7 +24,8 @@ def search_username(username: str):
 @user.route("/", strict_slashes=False, methods=["POST"])
 def add_user():
     if not request.is_json:
-        return jsonify(make_error_response("The body must be a JSON", 400))
+        response, status = make_error_response(BadRequestException())
+        return jsonify(response), status
     
     data = request.get_json()
     
@@ -38,7 +40,8 @@ def delete_user(username: str):
 @user.route("/<string:username>", strict_slashes=False, methods=["PUT"])
 def update_user(username: str):
     if not request.is_json:
-        return jsonify(make_error_response("The body must be a JSON", 400))
+        response, status = make_error_response(BadRequestException())
+        return jsonify(response), status
     
     data = request.get_json()
     

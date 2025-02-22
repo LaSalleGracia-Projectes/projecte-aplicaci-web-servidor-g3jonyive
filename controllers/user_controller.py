@@ -38,9 +38,9 @@ def add_user(data: dict):
     except Exception as e:
         return make_error_response(str(e), 500)
     
-def delete_user(uid: str):
+def delete_user(username: str):
     try:
-        return service.delete_user_by_uid(uid), 204
+        return service.delete_user_by_username(username), 204
     except ModelNotFoundException as e:
         return make_error_response(str(e), 404)
     except Exception as e:

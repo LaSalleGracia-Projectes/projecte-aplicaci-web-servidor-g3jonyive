@@ -49,8 +49,8 @@ def get_all_users() -> list:
 def search_user_by_username(username: str) -> list:
     return User.query.filter(User.username.like(f"%{username}%")).all()
 
-def delete_user_by_uid(uid: str):
-    user = get_user_by_uid(uid)
+def delete_user_by_username(username: str):
+    user = get_user_by_username(username)
     
     db.session.delete(user)
     db.session.commit()

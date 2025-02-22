@@ -1,35 +1,36 @@
 from flask import Blueprint, jsonify, request
 import controllers.user_controller as controller
+from utils.utils import make_error_response
 
 
 user = Blueprint(name="user", import_name=__name__, url_prefix="/api/user")
 
-@user.route("/")
+@user.route("/", strict_slashes=False)
 def users():
     response, status = controller.get_all_users()
     return jsonify(response), status
 
-@user.route("/<string:username>")
+@user.route("/<string:username>", strict_slashes=False,)
 def username(username: str):
     response, status = controller.get_user_by_username(username)
     return jsonify(response), status
 
-@user.route("/search/<string:username>")
+@user.route("/search/<string:username>", strict_slashes=False)
 def search_username(username: str):
     response, status = controller.search_user_by_username(username)
     return jsonify(response), status
 
-@user.route("/add", methods=["POST"])
+@user.route("/", strict_slashes=False, methods=["POST"])
 def add_user():
     if not request.is_json:
-        return jsonify({"error": "Has occurred an error", "details": "The body must be a JSON"}), 400
+        return jsonify(make_error_response("The body must be a JSON", 400))
     
     data = request.get_json()
     
     response, status = controller.add_user(data)
     return jsonify(response), status
 
-@user.route("/delete/<string:uid>", methods=["DELETE"])
-def delete_user(uid: str):
-    response, status = controller.delete_user(uid)
+@user.route("/<string:username>", strict_slashes=False, methods=["DELETE"])
+def delete_user(username: str):
+    response, status = controller.delete_user(username)
     return jsonify(response), status

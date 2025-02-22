@@ -1,0 +1,1 @@
+ERROR_RESPONSE = {"error": "Has occurred an error"}

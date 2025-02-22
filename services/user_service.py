@@ -1,10 +1,19 @@
 from utils.db import db
 from utils.exceptions import ModelNotFoundException, ModelAlreadyExistsException
 from models.user import User
+from datetime import datetime
 
 def add_user(user: User) -> User:
-    if not get_user_by_uid(user.uid) or not get_user_by_email(user.email) or not get_user_by_username(user.username):
+    try:
+        get_user_by_uid(user.uid)
+        get_user_by_email(user.email)
+        get_user_by_username(user.username)
         raise ModelAlreadyExistsException("User", user.uid)
+    except ModelNotFoundException as e:
+        pass
+    
+    if isinstance(user.birth_date, str):
+        user.birth_date = datetime.strptime(user.birth_date, "%Y-%m-%d").date()
     
     db.session.add(user)
     db.session.commit()

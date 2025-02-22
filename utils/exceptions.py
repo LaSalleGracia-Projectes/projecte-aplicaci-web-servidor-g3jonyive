@@ -9,3 +9,7 @@ class ModelAlreadyExistsException(Exception):
         self.model_name = model_name
         self.field = field
         super().__init__(f"{model_name} '{field}' already exists.")
+        
+class ValidationError(Exception):
+    def __init__(self, errors: dict):
+        self.errors = errors

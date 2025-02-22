@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify
+from flask import Blueprint, jsonify, request
 import controllers.user_controller as controller
 
 
@@ -17,4 +17,14 @@ def username(username: str):
 @user.route("/search/<string:username>")
 def search_username(username: str):
     response, status = controller.search_user_by_username(username)
+    return jsonify(response), status
+
+@user.route("/add", methods=["POST"])
+def add_user():
+    if not request.is_json:
+        return jsonify({"error": "Has occurred an error", "details": "The body must be a JSON"}), 400
+    
+    data = request.get_json()
+    
+    response, status = controller.add_user(data)
     return jsonify(response), status

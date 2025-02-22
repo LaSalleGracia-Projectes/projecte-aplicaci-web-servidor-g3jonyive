@@ -1,7 +1,7 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 from flask_cors import CORS
 from config import DATABASE_CONNECTION_URI, DEBUG
-from routes.api import api
+from routes import *
 from utils.db import db
 
 app = Flask(__name__)
@@ -13,18 +13,19 @@ db.init_app(app)
 
 CORS(app)
 
-app.register_blueprint(api)
+app.register_blueprint(user)
 
 @app.before_request
 def create_tables():
-    import models
-    db.create_all()
+    with app.app_context():
+        import models
+        db.create_all()
 
 @app.errorhandler(404)
 def page_not_found(error):
-    response = {"error": "Page not found"}
+    response = {"error": f"Page '{request.path}' not found"}
     if DEBUG:
-        response = {"error": "Page not found", "details": str(error)}
+        response['details'] = str(error)
     return jsonify(response), 404
 
 
@@ -32,7 +33,7 @@ def page_not_found(error):
 def method_not_allowed(error):
     response = {"error": "Method not allowed"}
     if DEBUG:
-        response = {"error": "Method not allowed", "details": str(error)}
+        response['details'] = str(error)
     return jsonify(response), 405
 
 
@@ -40,5 +41,5 @@ def method_not_allowed(error):
 def handle_exception(error):
     response = {"error": "Internal server error"}
     if DEBUG:
-        response = {"error": "Internal server error", "details": str(error)}
+        response['details'] = str(error)
     return jsonify(response), 500

@@ -4,9 +4,9 @@ from models.base_model import BaseModel
 class Payment(BaseModel):
     __tablename__ = 'payments'
     user1_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    user1 = db.relationship('User', backref='payments')
+    user1 = db.relationship('User', foreign_keys=[user1_id], backref='payments_user1')
     user2_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    user2 = db.relationship('User', backref='payments')
+    user2 = db.relationship('User', foreign_keys=[user2_id], backref='payments_user2')
     post_id = db.Column(db.Integer, db.ForeignKey('posts.id'), nullable=False)
     post = db.relationship('Post', backref='payments')
     amount = db.Column(db.Float, nullable=False)

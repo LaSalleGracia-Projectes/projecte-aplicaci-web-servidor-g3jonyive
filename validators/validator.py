@@ -9,6 +9,9 @@ class Validator:
         
     def validate(self):
         for key, value in self.validations.items():
+            if not value[0] is Validator.is_required and self.data.get(key, None) is None:
+                continue
+            
             for validation in value:
                 field = self.data.get(key, None)
                 if isinstance(validation, list):

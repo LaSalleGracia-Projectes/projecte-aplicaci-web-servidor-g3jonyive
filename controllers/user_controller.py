@@ -45,3 +45,22 @@ def delete_user(username: str):
         return make_error_response(str(e), 404)
     except Exception as e:
         return make_error_response(str(e), 500)
+    
+def update_user(username: str, data: dict):
+    try:
+        validator.validate_update_user(data)
+        user = service.get_user_by_username(username)
+        
+        user.full_name = data.get("full_name", user.full_name)
+        user.birth_date = data.get("birth_date", user.birth_date)
+        user.profile_picture = data.get("profile_picture", user.profile_picture)
+        user.phone = data.get("phone", user.phone)
+        
+        new_user = service.update_user(user)
+        return new_user.serialize(), 201
+    except ModelAlreadyExistsException as e:
+        return make_error_response(str(e), 409)
+    except ValidationError as e:
+        return {"error": "Invalid fields", "details": e.errors}, 400
+    except Exception as e:
+        return make_error_response(str(e), 500)

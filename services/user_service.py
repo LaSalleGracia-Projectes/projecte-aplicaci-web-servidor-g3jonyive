@@ -55,14 +55,13 @@ def delete_user_by_username(username: str):
     db.session.delete(user)
     db.session.commit()
 
-def update_user_by_id(user: User) -> User:
+def update_user(user: User) -> User:
     old_user = get_user_by_id(user.id)
     
-    old_user.uid = user.uid
-    old_user.email = user.email
     old_user.username = user.username
     old_user.birth_date = user.birth_date
     old_user.phone = user.phone
+    old_user.profile_picture = user.profile_picture
     
     db.session.commit()
     return old_user

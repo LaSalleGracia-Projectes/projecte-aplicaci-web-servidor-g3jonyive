@@ -9,6 +9,7 @@ def validate_add_user(data: dict):
         "birth_date": [Validator.is_required, Validator.is_date],
         "email": [Validator.is_required, Validator.is_email],
         "phone": [Validator.is_required, Validator.is_string],
+        "profile_picture": [Validator.is_string],
     }
     
     validator = Validator(data, validations)
@@ -17,4 +18,16 @@ def validate_add_user(data: dict):
     if not validator.status:
         raise ValidationError(validator.errors)
     
-    return True
+def validate_update_user(data: dict):
+    validations = {
+        "full_name": [Validator.is_string],
+        "birth_date": [Validator.is_date],
+        "phone": [Validator.is_string],
+        "profile_picture": [Validator.is_string],
+    }
+    
+    validator = Validator(data, validations)
+    validator.validate()
+    
+    if not validator.status:
+        raise ValidationError(validator.errors)

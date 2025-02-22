@@ -34,3 +34,13 @@ def add_user():
 def delete_user(username: str):
     response, status = controller.delete_user(username)
     return jsonify(response), status
+
+@user.route("/<string:username>", strict_slashes=False, methods=["PUT"])
+def update_user(username: str):
+    if not request.is_json:
+        return jsonify(make_error_response("The body must be a JSON", 400))
+    
+    data = request.get_json()
+    
+    response, status = controller.update_user(username, data)
+    return jsonify(response), status

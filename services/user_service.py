@@ -50,19 +50,13 @@ def search_user_by_username(username: str) -> list:
     return User.query.filter(User.username.like(f"%{username}%")).all()
 
 def delete_user_by_uid(uid: str):
-    user = User.query.get(uid=uid)
-    
-    if not user:
-        raise ModelNotFoundException("User", uid)
+    user = get_user_by_uid(uid)
     
     db.session.delete(user)
     db.session.commit()
 
 def update_user_by_id(user: User) -> User:
-    old_user = User.query.get(user.id)
-    
-    if not old_user:
-        raise ModelNotFoundException("User", user.username)
+    old_user = get_user_by_id(user.id)
     
     old_user.uid = user.uid
     old_user.email = user.email

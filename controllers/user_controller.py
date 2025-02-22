@@ -37,3 +37,11 @@ def add_user(data: dict):
         return {"error": "Invalid fields", "details": e.errors}, 400
     except Exception as e:
         return make_error_response(str(e), 500)
+    
+def delete_user(uid: str):
+    try:
+        return service.delete_user_by_uid(uid), 204
+    except ModelNotFoundException as e:
+        return make_error_response(str(e), 404)
+    except Exception as e:
+        return make_error_response(str(e), 500)

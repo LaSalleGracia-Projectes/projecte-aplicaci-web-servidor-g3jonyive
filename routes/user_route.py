@@ -28,3 +28,8 @@ def add_user():
     
     response, status = controller.add_user(data)
     return jsonify(response), status
+
+@user.route("/delete/<string:uid>", methods=["DELETE"])
+def delete_user(uid: str):
+    response, status = controller.delete_user(uid)
+    return jsonify(response), status

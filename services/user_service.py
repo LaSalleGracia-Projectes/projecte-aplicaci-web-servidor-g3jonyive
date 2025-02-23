@@ -6,9 +6,17 @@ from datetime import datetime
 def add_user(user: User) -> User:
     try:
         get_user_by_uid(user.uid)
-        get_user_by_email(user.email)
-        get_user_by_username(user.username)
         raise ModelAlreadyExistsException("User", user.uid)
+    except ModelNotFoundException as e:
+        pass
+    try:
+        get_user_by_username(user.username)
+        raise ModelAlreadyExistsException("User", user.username)
+    except ModelNotFoundException as e:
+        pass
+    try:
+        get_user_by_email(user.email)
+        raise ModelAlreadyExistsException("User", user.email)
     except ModelNotFoundException as e:
         pass
     

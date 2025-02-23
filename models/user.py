@@ -3,7 +3,7 @@ from models.base_model import BaseModel
 
 class User(BaseModel):
     __tablename__ = 'users'
-    uid = db.Column(db.String(255), nullable=False)
+    uid = db.Column(db.String(255), nullable=False, unique=True)
     email = db.Column(db.String(255), nullable=False, unique=True)
     full_name = db.Column(db.String(255), nullable=False)
     username = db.Column(db.String(255), nullable=False, unique=True)

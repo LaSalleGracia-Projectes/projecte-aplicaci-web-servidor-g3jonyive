@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, request
 import controllers.user_controller as controller
-from utils.utils import make_error_response
+from utils.utils import make_error_response, need_json
 from utils.exceptions import BadRequestException
 
 
@@ -22,11 +22,8 @@ def search_username(username: str):
     return jsonify(response), status
 
 @user.route("/", strict_slashes=False, methods=["POST"])
+@need_json
 def add_user():
-    if not request.is_json:
-        response, status = make_error_response(BadRequestException())
-        return jsonify(response), status
-    
     data = request.get_json()
     
     response, status = controller.add_user(data)

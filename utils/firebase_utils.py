@@ -1,7 +1,7 @@
 import pyrebase
 from config import FIREBASECONFIG, ADMIN_TOKEN
 from requests.exceptions import HTTPError
-from utils.exceptions import FirebaseException, UnauthorizedException, ModelNotFoundException
+from utils.exceptions import FirebaseException, UnauthorizedException, ModelNotFoundException, BadRequestException
 from flask import request
 from services.user_service import get_user_by_username, get_user_by_uid
 from utils.utils import make_error_response
@@ -62,6 +62,19 @@ def verify_token_uid(func):
         return func(uid, *args, **kwargs)
     return wrapper
 
-def get_user_by_token(token: str):
-    uid = verify_token(token)
-    return get_user_by_uid(uid)
+def get_user_by_token(func):
+    def wrapper(data: dict, *args, **kwargs):
+        auth_header = request.headers.get('Authorization')
+        
+        if not auth_header:
+            return make_error_response(BadRequestException("User token is required"))
+        
+        try:
+            uid_user = verify_token(auth_header)
+            user = get_user_by_uid(uid_user)
+            data['user_id'] = user.id
+        except (FirebaseException, ModelNotFoundException) as e:
+            return make_error_response(e)
+        
+        return func(data, *args, **kwargs)
+    return wrapper

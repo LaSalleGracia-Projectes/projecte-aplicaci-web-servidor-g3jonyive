@@ -1,4 +1,5 @@
 from datetime import datetime
+from utils.constants import *
 
 class Validator:
     def __init__(self, data: dict, validations: dict):
@@ -24,39 +25,41 @@ class Validator:
     
     def is_required(self, value):
         if value is None:
-            return False, 'The field is required'
+            return False, IS_REQUIRED
         return True, ''
     
     def is_number(self, value):
-        if not value.isnumeric():
-            return False, 'The field must be a number'
-        return True, ''
+        try:
+            float(str(value).replace(',', '.'))
+            return True, ''
+        except ValueError:
+            return False, IS_NUMBER
     
     def positive_number(self, value):
-        if int(value) < 0:
-            return False, 'The field must be a positive number'
+        if float(value) < 0:
+            return False, POSITIVE_NUMBER
         return True, ''
     
     def is_string(self, value):
         if not isinstance(value, str):
-            return False, 'The field must be a string'
+            return False, IS_STRING
         return True, ''
     
     def is_date(self, value):
         try:
             datetime.strptime(value, "%Y-%m-%d")
         except ValueError:
-            return False, 'The field must be a date, format: YYYY-MM-DD'
+            return False, IS_DATE
         return True, ''
     
     def is_email(self, value):
         if not '@' in value or not '.' in value:
-            return False, 'The field must be an email'
+            return False, IS_EMAIL
         return True, ''
     
     def is_boolean(self, value):
         if not isinstance(value, bool) and not value in ["True", "False"] and not value in [1, 0]:
-            return False, 'The field must be a boolean value'
+            return False, IS_BOOLEAN
         value = value == "True" or value == 1
         return True, ''
     

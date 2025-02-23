@@ -1,5 +1,5 @@
 import pyrebase
-from config import FIREBASECONFIG
+from config import FIREBASECONFIG, ADMIN_TOKEN
 from requests.exceptions import HTTPError
 from utils.exceptions import FirebaseException, UnauthorizedException, ModelNotFoundException
 from flask import request
@@ -23,6 +23,9 @@ def verify_token_username(func):
         if not auth_header:
             return make_error_response(UnauthorizedException())
         
+        if auth_header == ADMIN_TOKEN:
+            return func(username, *args, **kwargs)
+        
         try:
             uid_user = verify_token(auth_header)
         except FirebaseException as e:
@@ -44,6 +47,9 @@ def verify_token_uid(func):
         
         if not auth_header:
             return make_error_response(UnauthorizedException())
+        
+        if auth_header == ADMIN_TOKEN:
+            return func(uid, *args, **kwargs)
         
         try:
             uid_user = verify_token(auth_header)

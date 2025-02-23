@@ -1,7 +1,7 @@
 import pyrebase
 from requests.exceptions import HTTPError
 from config import FIREBASECONFIG
-from utils.utils import exception_parser
+from utils.exceptions import FirebaseException
 import json
 
 firebase = pyrebase.initialize_app(FIREBASECONFIG)
@@ -13,12 +13,14 @@ def login():
     try:
         user = auth.sign_in_with_email_and_password(email, password)
         print(f"User {user['email']} logged in")
-        with open("token.json", "w") as f:
+        with open("test.json", "w") as f:
             json.dump(user, f)
         verify_token(user['idToken'])
+        uid = user['localId']
+        print(f"User UID: {uid}")
     except HTTPError as e:
-        ex = exception_parser(e)
-        print(ex)
+        e = FirebaseException(e)
+        print(e)
 
 def signup():
     email = input("Enter your email: ")
@@ -27,8 +29,8 @@ def signup():
         user = auth.create_user_with_email_and_password(email, password)
         print(f"User {user['email']} created")
     except HTTPError as e:
-        ex = exception_parser(e)
-        print(ex)
+        e = FirebaseException(e)
+        print(e)
 
 def reset_password():
     email = input("Enter your email: ")
@@ -37,12 +39,15 @@ def reset_password():
 
 def verify_token(token):
     try:
-        user = auth.get_account_info(token)
+        user = auth.sign_in_anonymous()
+        print(f"Token is valid for user: {user['localId']}")
+        user = auth.get_account_info(user['idToken'])
+        with open("token.json", "w") as f:
+            json.dump(user, f)
         print(f"Token is valid for user: {user['users'][0]['email']}")
     except HTTPError as e:
-        ex = exception_parser(e)
-        print("Invalid token")
-        print(ex)
+        e = FirebaseException(e)
+        print(e)
 
 def main():
     while True:

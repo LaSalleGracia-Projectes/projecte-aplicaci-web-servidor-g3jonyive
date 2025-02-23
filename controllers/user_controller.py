@@ -1,8 +1,10 @@
+from flask import request
 from utils.utils import make_error_response
 import services.user_service as service
 from models import User
-from utils.exceptions import ModelNotFoundException, ModelAlreadyExistsException, ValidationError, InternalServerError
+from utils.exceptions import ModelNotFoundException, ModelAlreadyExistsException, ValidationError, InternalServerError, UnauthorizedException
 from validators import user_validator as validator
+from utils.firebase_utils import verify_token_username
 
 def get_all_users():
     try:
@@ -36,14 +38,17 @@ def add_user(data: dict):
     except Exception as e:
         return make_error_response(InternalServerError(str(e)))
     
+    
+@verify_token_username
 def delete_user(username: str):
     try:
         return service.delete_user_by_username(username), 204
-    except ModelNotFoundException as e:
+    except (ModelNotFoundException, UnauthorizedException) as e:
         return make_error_response(e)
     except Exception as e:
         return make_error_response(str(e), InternalServerError ,500)
-    
+
+@verify_token_username
 def update_user(username: str, data: dict):
     try:
         validator.validate_update_user(data)
@@ -56,7 +61,7 @@ def update_user(username: str, data: dict):
         
         new_user = service.update_user(user)
         return new_user.serialize(), 201
-    except (ModelAlreadyExistsException, ValidationError) as e:
+    except (ModelAlreadyExistsException, ModelNotFoundException, ValidationError) as e:
         return make_error_response(e)
     except Exception as e:
         return make_error_response(InternalServerError(str(e)))

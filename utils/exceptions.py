@@ -1,4 +1,6 @@
 from utils.constants import BODY_REQUIRED, INTERNAL_SERVER_ERROR, METHOD_NOT_ALLOWED, UNAUTHORIZED_ERROR, VALIDATION_ERROR
+from requests.exceptions import HTTPError
+import json
 
 class ModelNotFoundException(Exception):
     def __init__(self, model_name, field):
@@ -51,3 +53,11 @@ class MethodNotAllowed(Exception):
         self.details = METHOD_NOT_ALLOWED
         self.status_code = 405
         super().__init__(self.details)
+        
+class FirebaseException(HTTPError):
+    def __init__(self, exception: HTTPError):
+        error_json = exception.args[1]
+        error_dict = json.loads(error_json).get('error')
+        self.details = error_dict.get('message', INTERNAL_SERVER_ERROR)
+        self.status_code = error_dict.get('code', 500)
+        super().__init__(f"{self.status_code}: {self.details}")

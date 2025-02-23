@@ -3,7 +3,7 @@ from config import FIREBASECONFIG, ADMIN_TOKEN
 from requests.exceptions import HTTPError
 from utils.exceptions import FirebaseException, UnauthorizedException, ModelNotFoundException
 from flask import request
-from services.user_service import get_user_by_username
+from services.user_service import get_user_by_username, get_user_by_uid
 from utils.utils import make_error_response
 
 firebase = pyrebase.initialize_app(FIREBASECONFIG)
@@ -61,3 +61,7 @@ def verify_token_uid(func):
         
         return func(uid, *args, **kwargs)
     return wrapper
+
+def get_user_by_token(token: str):
+    uid = verify_token(token)
+    return get_user_by_uid(uid)

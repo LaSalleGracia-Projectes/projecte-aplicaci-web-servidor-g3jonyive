@@ -16,6 +16,7 @@ db.init_app(app)
 CORS(app)
 
 app.register_blueprint(user)
+app.register_blueprint(post)
 
 @app.before_request
 def create_tables():

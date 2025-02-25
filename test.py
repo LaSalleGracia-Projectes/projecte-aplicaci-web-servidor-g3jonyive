@@ -15,9 +15,7 @@ def login():
         print(f"User {user['email']} logged in")
         with open("test.json", "w") as f:
             json.dump(user, f)
-        verify_token(user['idToken'])
-        uid = user['localId']
-        print(f"User UID: {uid}")
+        print(f"User Token: {user['idToken']}")
     except HTTPError as e:
         e = FirebaseException(e)
         print(e)

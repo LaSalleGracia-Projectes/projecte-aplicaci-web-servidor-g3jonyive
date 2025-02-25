@@ -39,18 +39,22 @@ def add_user(data: dict):
         return make_error_response(InternalServerError(str(e)))
     
     
-@verify_token_username
 def delete_user(username: str):
     try:
+        if not verify_token_username(username):
+            raise UnauthorizedException()
+        
         return service.delete_user_by_username(username), 204
     except (ModelNotFoundException, UnauthorizedException) as e:
         return make_error_response(e)
     except Exception as e:
         return make_error_response(str(e), InternalServerError ,500)
 
-@verify_token_username
 def update_user(username: str, data: dict):
     try:
+        if not verify_token_username(username):
+            raise UnauthorizedException()
+        
         validator.validate_update_user(data)
         user = service.get_user_by_username(username)
         
@@ -61,7 +65,7 @@ def update_user(username: str, data: dict):
         
         new_user = service.update_user(user)
         return new_user.serialize(), 201
-    except (ModelAlreadyExistsException, ModelNotFoundException, ValidationError) as e:
+    except (ModelAlreadyExistsException, ModelNotFoundException, ValidationError, UnauthorizedException) as e:
         return make_error_response(e)
     except Exception as e:
         return make_error_response(InternalServerError(str(e)))

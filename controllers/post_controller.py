@@ -1,6 +1,6 @@
 from utils.utils import make_error_response
 import services.post_service as service
-from utils.exceptions import InternalServerError, ValidationError, ModelNotFoundException
+from utils.exceptions import InternalServerError, ValidationError, ModelNotFoundException, UnauthorizedException, FirebaseException
 import validators.post_validator as validator
 from utils.firebase_utils import get_user_by_token
 from models.post import Post
@@ -11,15 +11,18 @@ def get_all_posts():
     except Exception as e:
         return make_error_response(InternalServerError(str(e)))
 
-@get_user_by_token
 def add_post(data: dict):
     try:
+        user = get_user_by_token()
+        
+        data['user_id'] = user.id
+        
         validator.validate_add_post(data)
         
         post = service.add_post(Post(**data))
         
         return post.serialize(), 201
-    except ValidationError as e:
+    except (ValidationError, FirebaseException, ModelNotFoundException, UnauthorizedException) as e:
         return make_error_response(e)
     except Exception as e:
         return make_error_response(InternalServerError(str(e)))

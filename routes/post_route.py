@@ -12,11 +12,12 @@ def posts():
 @post.route("/", strict_slashes=False, methods=["POST"])
 @need_json
 def add_post():
-    # if not request.is_json:
-    #     response, status = make_error_response(BadRequestException())
-    #     return jsonify(response), status
-    
     data = request.get_json()
     
     response, status = controller.add_post(data)
+    return jsonify(response), status
+
+@post.route("/<int:post_id>", strict_slashes=False)
+def post_by_id(post_id: int):
+    response, status = controller.get_post_by_id(post_id)
     return jsonify(response), status

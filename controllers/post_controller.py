@@ -52,3 +52,31 @@ def delete_post(post_id: int):
         return make_error_response(e)
     except Exception as e:
         return make_error_response(InternalServerError(str(e)))
+    
+def update_post(data: dict, post_id: int):
+    try:
+        if not is_admin_token():
+            user = get_user_by_token()
+        
+        post = service.get_post_by_id(post_id)
+        
+        if not is_admin_token():
+            if post.user_id != user.id:
+                raise UnauthorizedException("You are not authorized to update this post")
+        
+        validator.validate_update_post(data)
+        
+        post.title = data.get("title", post.title)
+        post.description = data.get("description", post.description)
+        post.photo = data.get("photo", post.photo)
+        post.specialization_id = data.get("specialization_id", post.specialization_id)
+        post.price = data.get("price", post.price)
+        post.company_id = data.get("company_id", post.company_id)
+        
+        post.id = post_id
+        
+        return service.update_post(post).serialize(), 200
+    except (ValidationError, ModelNotFoundException, UnauthorizedException) as e:
+        return make_error_response(e)
+    except Exception as e:
+        return make_error_response(InternalServerError(str(e)))

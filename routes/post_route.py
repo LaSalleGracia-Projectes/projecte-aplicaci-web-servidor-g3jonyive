@@ -1,6 +1,7 @@
 from flask import Blueprint, jsonify, request
 import controllers.post_controller as controller
-from utils.utils import need_json
+from utils.utils import need_json, make_error_response
+from utils.exceptions import BadRequestException
 
 post = Blueprint(name="post", import_name=__name__, url_prefix="/api/post")
 
@@ -25,4 +26,15 @@ def post_by_id(post_id: int):
 @post.route("/<int:post_id>", strict_slashes=False, methods=["DELETE"])
 def delete_post(post_id: int):
     response, status = controller.delete_post(post_id)
+    return jsonify(response), status
+
+@post.route("/<int:post_id>", strict_slashes=False, methods=["PUT"])
+def update_post(post_id: str):
+    if not request.is_json:
+        response, status = make_error_response(BadRequestException())
+        return jsonify(response), status
+    
+    data = request.get_json()
+    
+    response, status = controller.update_post(data, post_id)
     return jsonify(response), status

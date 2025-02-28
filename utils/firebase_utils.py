@@ -23,9 +23,6 @@ def verify_token_username(username: str) -> bool:
     if not auth_header:
         raise BadRequestException(TOKEN_REQUIRED)
     
-    if auth_header == ADMIN_TOKEN:
-        return True
-    
     uid = get_uid_by_token(auth_header)
     user = get_user_by_uid(uid)
     

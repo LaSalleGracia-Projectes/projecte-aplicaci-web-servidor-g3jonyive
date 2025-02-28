@@ -1,5 +1,5 @@
 from flask import request
-from utils.utils import make_error_response
+from utils.utils import make_error_response, is_admin_token
 import services.user_service as service
 from models import User
 from utils.exceptions import ModelNotFoundException, ModelAlreadyExistsException, ValidationError, InternalServerError, UnauthorizedException
@@ -41,8 +41,9 @@ def add_user(data: dict):
     
 def delete_user(username: str):
     try:
-        if not verify_token_username(username):
-            raise UnauthorizedException()
+        if not is_admin_token():
+            if not verify_token_username(username):
+                raise UnauthorizedException()
         
         return service.delete_user_by_username(username), 204
     except (ModelNotFoundException, UnauthorizedException) as e:
@@ -52,8 +53,9 @@ def delete_user(username: str):
 
 def update_user(username: str, data: dict):
     try:
-        if not verify_token_username(username):
-            raise UnauthorizedException()
+        if not is_admin_token():
+            if not verify_token_username(username):
+                raise UnauthorizedException()
         
         validator.validate_update_user(data)
         user = service.get_user_by_username(username)

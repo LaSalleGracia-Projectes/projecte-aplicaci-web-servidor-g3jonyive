@@ -15,3 +15,8 @@ def get_post_by_id(post_id: int) -> Post:
     if not post:
         raise ModelNotFoundException("Post", post_id)
     return post
+
+def delete_post(post_id: int) -> None:
+    post = get_post_by_id(post_id)
+    db.session.delete(post)
+    db.session.commit()

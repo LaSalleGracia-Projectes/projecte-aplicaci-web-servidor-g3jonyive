@@ -31,7 +31,6 @@ def verify_token_username(username: str) -> bool:
     
     return user.username == username
 
-
 def verify_token_uid(uid: str) -> bool:
     auth_header = request.headers.get('Authorization')
     

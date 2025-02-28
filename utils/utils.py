@@ -3,6 +3,7 @@ from config import DEBUG
 from flask import request
 from utils.exceptions import BadRequestException
 from werkzeug.exceptions import BadRequest
+from config import ADMIN_TOKEN
 
 def log(tag: str = "[DEBUG]", message: str = "") -> None:
     if DEBUG:
@@ -24,3 +25,7 @@ def need_json(func):
         
         return func(*args, **kwargs)
     return wrapper
+
+def is_admin_token() -> bool:
+    token = request.headers.get('Authorization')
+    return token == ADMIN_TOKEN

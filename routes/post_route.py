@@ -21,3 +21,8 @@ def add_post():
 def post_by_id(post_id: int):
     response, status = controller.get_post_by_id(post_id)
     return jsonify(response), status
+
+@post.route("/<int:post_id>", strict_slashes=False, methods=["DELETE"])
+def delete_post(post_id: int):
+    response, status = controller.delete_post(post_id)
+    return jsonify(response), status

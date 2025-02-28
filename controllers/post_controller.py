@@ -1,4 +1,4 @@
-from utils.utils import make_error_response
+from utils.utils import make_error_response, is_admin_token
 import services.post_service as service
 from utils.exceptions import InternalServerError, ValidationError, ModelNotFoundException, UnauthorizedException, FirebaseException
 import validators.post_validator as validator
@@ -31,6 +31,24 @@ def get_post_by_id(post_id: int):
     try:
         return service.get_post_by_id(post_id).serialize(), 200
     except ModelNotFoundException as e:
+        return make_error_response(e)
+    except Exception as e:
+        return make_error_response(InternalServerError(str(e)))
+    
+def delete_post(post_id: int):
+    try:
+        if is_admin_token():
+            return service.delete_post(post_id), 204
+        
+        user = get_user_by_token()
+        
+        post = service.get_post_by_id(post_id)
+        
+        if post.user_id != user.id:
+            raise UnauthorizedException("You are not authorized to delete this post")
+        
+        return service.delete_post(post_id), 204
+    except (ModelNotFoundException, UnauthorizedException) as e:
         return make_error_response(e)
     except Exception as e:
         return make_error_response(InternalServerError(str(e)))

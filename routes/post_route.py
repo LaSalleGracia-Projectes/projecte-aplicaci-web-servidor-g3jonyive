@@ -28,7 +28,7 @@ def delete_post(post_id: int):
     response, status = controller.delete_post(post_id)
     return jsonify(response), status
 
-@post.route("/<int:post_id>", strict_slashes=False, methods=["PUT"])
+@post.route("/<int:post_id>", strict_slashes=False, methods=["PATCH", "PUT"])
 def update_post(post_id: str):
     if not request.is_json:
         response, status = make_error_response(BadRequestException())

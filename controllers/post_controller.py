@@ -17,9 +17,9 @@ def add_post(data: dict):
         
         data['user_id'] = user.id
         
-        validator.validate_add_post(data)
+        validated_data = validator.validate_add_post(data)
         
-        post = service.add_post(Post(**data))
+        post = service.add_post(Post(**validated_data))
         
         return post.serialize(), 201
     except (ValidationError, FirebaseException, ModelNotFoundException, UnauthorizedException) as e:
@@ -64,14 +64,14 @@ def update_post(data: dict, post_id: int):
             if post.user_id != user.id:
                 raise UnauthorizedException("You are not authorized to update this post")
         
-        validator.validate_update_post(data)
+        validated_data = validator.validate_update_post(data)
         
-        post.title = data.get("title", post.title)
-        post.description = data.get("description", post.description)
-        post.photo = data.get("photo", post.photo)
-        post.specialization_id = data.get("specialization_id", post.specialization_id)
-        post.price = data.get("price", post.price)
-        post.company_id = data.get("company_id", post.company_id)
+        post.title = validated_data.get("title", post.title)
+        post.description = validated_data.get("description", post.description)
+        post.photo = validated_data.get("photo", post.photo)
+        post.specialization_id = validated_data.get("specialization_id", post.specialization_id)
+        post.price = validated_data.get("price", post.price)
+        post.company_id = validated_data.get("company_id", post.company_id)
         
         post.id = post_id
         

@@ -29,8 +29,8 @@ def search_user_by_username(username: str):
     
 def add_user(data: dict):
     try:
-        validator.validate_add_user(data)
-        user = User(**data)
+        validated_data = validator.validate_add_user(data)
+        user = User(**validated_data)
         new_user = service.add_user(user)
         return new_user.serialize(), 201
     except (ModelAlreadyExistsException, ValidationError) as e:
@@ -57,13 +57,13 @@ def update_user(username: str, data: dict):
             if not verify_token_username(username):
                 raise UnauthorizedException()
         
-        validator.validate_update_user(data)
+        validated_data = validator.validate_update_user(data)
         user = service.get_user_by_username(username)
         
-        user.full_name = data.get("full_name", user.full_name)
-        user.birth_date = data.get("birth_date", user.birth_date)
-        user.profile_picture = data.get("profile_picture", user.profile_picture)
-        user.phone = data.get("phone", user.phone)
+        user.full_name = validated_data.get("full_name", user.full_name)
+        user.birth_date = validated_data.get("birth_date", user.birth_date)
+        user.profile_picture = validated_data.get("profile_picture", user.profile_picture)
+        user.phone = validated_data.get("phone", user.phone)
         
         new_user = service.update_user(user)
         return new_user.serialize(), 201

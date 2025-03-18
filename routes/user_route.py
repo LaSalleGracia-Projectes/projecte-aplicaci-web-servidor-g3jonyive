@@ -34,7 +34,7 @@ def delete_user(username: str):
     response, status = controller.delete_user(username)
     return jsonify(response), status
 
-@user.route("/<string:username>", strict_slashes=False, methods=["PUT"])
+@user.route("/<string:username>", strict_slashes=False, methods=["PATCH", "PUT"])
 def update_user(username: str):
     if not request.is_json:
         response, status = make_error_response(BadRequestException())

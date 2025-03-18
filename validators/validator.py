@@ -8,7 +8,8 @@ class Validator:
         self.data = data
         self.validations = validations
         
-    def validate(self):
+    def validate(self) -> dict:
+        data = {}
         for key, value in self.validations.items():
             if not value[0] is Validator.is_required and self.data.get(key, None) is None:
                 continue
@@ -22,6 +23,9 @@ class Validator:
                 if not status:
                     self.add_error(key, message)
                     break
+                
+                data[key] = field
+        return data
     
     def is_required(self, value):
         if value is None:

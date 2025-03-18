@@ -13,10 +13,12 @@ def validate_add_user(data: dict):
     }
     
     validator = Validator(data, validations)
-    validator.validate()
+    validated_data = validator.validate()
     
     if not validator.status:
         raise ValidationError(validator.errors)
+    
+    return validated_data
     
 def validate_update_user(data: dict):
     validations = {
@@ -27,7 +29,9 @@ def validate_update_user(data: dict):
     }
     
     validator = Validator(data, validations)
-    validator.validate()
+    validated_data = validator.validate()
     
     if not validator.status:
         raise ValidationError(validator.errors)
+    
+    return validated_data

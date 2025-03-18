@@ -1,5 +1,7 @@
 from datetime import datetime
 from utils.constants import *
+from services import *
+from utils.exceptions import ModelNotFoundException
 
 class Validator:
     def __init__(self, data: dict, validations: dict):
@@ -71,6 +73,24 @@ class Validator:
         if value not in values:
             return False, f'The field must be one of the following values: {values}'
         return True, ''
+    
+    def exist_company(self, value):
+        try:
+            company_service.get_company_by_id(value)
+            return True, ''
+        except ModelNotFoundException:
+            return False, f'The company with id {value} does not exist'
+        except Exception as e:
+            return False, str(e)
+        
+    def exist_user(self, value):
+        try:
+            user_service.get_user_by_id(value)
+            return True, ''
+        except ModelNotFoundException:
+            return False, f'The user with id {value} does not exist'
+        except Exception as e:
+            return False, str(e)
     
     def add_error(self, key: str, message: str):
         self.errors.append({key: message})

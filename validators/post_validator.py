@@ -4,11 +4,11 @@ from validators.validator import Validator
 def validate_add_post(data: dict):
     validations = {
         "price": [Validator.is_required, Validator.is_number, Validator.positive_number],
-        "user_id": [Validator.is_required, Validator.is_number, Validator.positive_number],
+        "user_id": [Validator.is_required, Validator.is_number, Validator.positive_number, Validator.exist_user],
         "title": [Validator.is_required, Validator.is_string],
         "description": [Validator.is_required, Validator.is_string],
         "photo": [Validator.is_string],
-        "company_id": [Validator.is_number, Validator.positive_number],
+        "company_id": [Validator.is_number, Validator.positive_number, Validator.exist_company],
         "specialization_id": [Validator.is_number, Validator.positive_number]
     }
     

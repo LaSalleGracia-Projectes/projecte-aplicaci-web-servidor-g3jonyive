@@ -25,3 +25,13 @@ def like_post(post_id: int):
         return make_error_response(e)
     except Exception as e:
         return make_error_response(InternalServerError(str(e)))
+    
+def post_likes(post_id: int):
+    try:
+        post = post_service.get_post_by_id(post_id)
+        likes = like_service.get_post_likes(post.id)
+        return len(likes), 200
+    except (ModelNotFoundException) as e:
+        return make_error_response(e)
+    except Exception as e:
+        return make_error_response(InternalServerError(str(e)))

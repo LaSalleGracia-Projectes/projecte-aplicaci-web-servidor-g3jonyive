@@ -19,8 +19,8 @@ def get_like_by_id(like_id: int) -> Like:
 def get_post_likes(post_id: int) -> list:
     return Like.query.filter_by(post_id=post_id).all()
 
-def get_user_liked(user_id: int, post_id: int) -> bool:
-    return Like.query.filter_by(user_id=user_id, post_id=post_id).first() is not None
+def get_user_post_like(user_id: int, post_id: int) -> Like:
+    return Like.query.filter_by(user_id=user_id, post_id=post_id).first()
 
 def delete_like(like_id: int) -> None:
     like = get_like_by_id(like_id)

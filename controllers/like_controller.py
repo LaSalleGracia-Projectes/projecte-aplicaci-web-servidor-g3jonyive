@@ -10,12 +10,17 @@ def like_post(post_id: int):
         user = get_user_by_token()
         post = post_service.get_post_by_id(post_id)
         
-        like = Like(
-            user_id=user.id,
-            post_id=post.id
-        )
+        like = like_service.get_user_post_like(user.id, post.id)
         
-        return like_service.add_like(like).serialize(), 200
+        if like:
+            return like_service.delete_like(like.id), 204
+        else:
+            like = Like(
+                user_id=user.id,
+                post_id=post.id
+            )
+            return like_service.add_like(like).serialize(), 201
+        
     except (ModelNotFoundException, UnauthorizedException, FirebaseException) as e:
         return make_error_response(e)
     except Exception as e:

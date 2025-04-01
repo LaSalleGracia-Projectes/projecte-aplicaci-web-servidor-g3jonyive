@@ -82,7 +82,16 @@ class Validator:
             return False, f'The company with id {value} does not exist'
         except Exception as e:
             return False, str(e)
-        
+    
+    def exist_specialization(self, value):
+        try:
+            specialization_service.get_specialization_by_id(value)
+            return True, ''
+        except ModelNotFoundException:
+            return False, f'The specialization with id {value} does not exist'
+        except Exception as e:
+            return False, str(e)
+    
     def exist_user(self, value):
         try:
             user_service.get_user_by_id(value)

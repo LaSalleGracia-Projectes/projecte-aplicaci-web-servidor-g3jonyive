@@ -9,7 +9,7 @@ def validate_add_post(data: dict):
         "description": [Validator.is_required, Validator.is_string],
         "photo": [Validator.is_string],
         "company_id": [Validator.is_number, Validator.positive_number, Validator.exist_company],
-        "specialization_id": [Validator.is_number, Validator.positive_number]
+        "specialization_id": [Validator.is_number, Validator.positive_number, Validator.exist_specialization]
     }
     
     validator = Validator(data, validations)

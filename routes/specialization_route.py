@@ -31,3 +31,8 @@ def new_specialization():
 def specialization_by_name(name):
     response, status = controller.search_specialization_by_name(name)
     return jsonify(response), status
+
+@specialization.route("/<int:specialization_id>", strict_slashes=False, methods=["DELETE"])
+def delete_specialization(specialization_id):
+    response, status = controller.delete_specialization(specialization_id)
+    return jsonify(response), status

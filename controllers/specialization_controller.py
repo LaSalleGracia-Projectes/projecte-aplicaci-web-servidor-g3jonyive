@@ -38,3 +38,11 @@ def create_specialization(data):
         return make_error_response(e)
     except Exception as e:
         return make_error_response(InternalServerError(str(e)))
+    
+def delete_specialization(specialization_id):
+    try:
+        return service.delete_specialization(specialization_id), 204
+    except ModelNotFoundException as e:
+        return make_error_response(e)
+    except Exception as e:
+        return make_error_response(InternalServerError(str(e)))

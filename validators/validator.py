@@ -30,7 +30,7 @@ class Validator:
         return data
     
     def is_required(self, value):
-        if value is None:
+        if value is None or value == "":
             return False, IS_REQUIRED
         return True, ''
     

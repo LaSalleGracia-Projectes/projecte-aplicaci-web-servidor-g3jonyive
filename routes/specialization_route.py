@@ -10,3 +10,19 @@ specialization = Blueprint(name="specialization", import_name=__name__, url_pref
 def specializations():
     response, status = controller.get_all_specializations()
     return jsonify(response), status
+
+@specialization.route("/<int:specialization_id>", strict_slashes=False)
+def specialization_by_id(specialization_id):
+    response, status = controller.get_specialization_by_id(specialization_id)
+    return jsonify(response), status
+
+@specialization.route("/", strict_slashes=False, methods=["POST"])
+def new_specialization():
+    if not request.is_json:
+        response, status = make_error_response(BadRequestException())
+        return jsonify(response), status
+    
+    data = request.get_json()
+    
+    response, status = controller.create_specialization(data)
+    return jsonify(response), status

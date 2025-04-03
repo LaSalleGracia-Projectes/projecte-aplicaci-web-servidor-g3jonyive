@@ -1,8 +1,10 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 from flask_cors import CORS
 from config import DATABASE_CONNECTION_URI, DEBUG
-from routes.api import api
+from routes import *
 from utils.db import db
+from utils.exceptions import InternalServerError, PageNotFound, MethodNotAllowed
+from utils.utils import make_error_response
 
 app = Flask(__name__)
 
@@ -13,31 +15,31 @@ db.init_app(app)
 
 CORS(app)
 
-app.register_blueprint(api)
+app.register_blueprint(user)
+app.register_blueprint(post)
+app.register_blueprint(company)
+app.register_blueprint(like)
+app.register_blueprint(specialization)
 
 @app.before_request
 def create_tables():
-    db.create_all()
+    with app.app_context():
+        import models
+        db.create_all()
 
 @app.errorhandler(404)
-def page_not_found(error):
-    response = {"error": "Page not found"}
-    if DEBUG:
-        response = {"error": "Page not found", "details": str(error)}
-    return jsonify(response), 404
+def page_not_found(error: Exception):
+    response, status = make_error_response(PageNotFound(request.path))
+    return jsonify(response), status
 
 
 @app.errorhandler(405)
-def method_not_allowed(error):
-    response = {"error": "Method not allowed"}
-    if DEBUG:
-        response = {"error": "Method not allowed", "details": str(error)}
-    return jsonify(response), 405
+def method_not_allowed(error: Exception):
+    response, status = make_error_response(MethodNotAllowed())
+    return jsonify(response), status
 
 
 @app.errorhandler(Exception)
-def handle_exception(error):
-    response = {"error": "Internal server error"}
-    if DEBUG:
-        response = {"error": "Internal server error", "details": str(error)}
-    return jsonify(response), 500
+def handle_exception(error: Exception):
+    response, status = make_error_response(InternalServerError(str(error)))
+    return jsonify(response), status

@@ -11,6 +11,10 @@ DATABASE_CONNECTION_URI = os.getenv("DATABASE_CONNECTION_URI", "sqlite:///databa
 
 TIME_ZONE = os.getenv("TIME_ZONE", "Europe/Madrid")
 
+PORT = os.getenv("PORT", 8000)
+
+ADMIN_TOKEN = os.getenv("ADMIN_TOKEN", "admin")
+
 FIREBASECONFIG = {
     "apiKey": "AIzaSyDxLBYdHFUZp4JIwgoCWpEJgz9C8d5SLvA",
     "authDomain": "connectyourcoach-98301.firebaseapp.com",

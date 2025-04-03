@@ -26,3 +26,8 @@ def new_specialization():
     
     response, status = controller.create_specialization(data)
     return jsonify(response), status
+
+@specialization.route("/search/<string:name>", strict_slashes=False)
+def specialization_by_name(name):
+    response, status = controller.search_specialization_by_name(name)
+    return jsonify(response), status

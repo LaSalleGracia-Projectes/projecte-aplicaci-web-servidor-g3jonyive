@@ -19,6 +19,15 @@ def get_company_by_id(company_id: int):
     except Exception as e:
         return make_error_response(InternalServerError(str(e)))
 
+def search_company_by_name(name: str):
+    try:
+        companies = service.search_company_by_name(name)
+        return [company.serialize() for company in companies], 200
+    except ModelNotFoundException as e:
+        return make_error_response(e)
+    except Exception as e:
+        return make_error_response(InternalServerError(str(e)))
+
 def delete_company(company_id: int):
     try:
         return service.delete_company(company_id), 204

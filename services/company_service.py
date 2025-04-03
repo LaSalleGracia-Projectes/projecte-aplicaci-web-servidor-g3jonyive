@@ -12,6 +12,12 @@ def get_company_by_id(company_id: int) -> Company:
         raise ModelNotFoundException("Company", company_id)
     return company
 
+def search_company_by_name(name: str) -> list:
+    company = Company.query.filter(Company.name.like(f"%{name}%")).all()
+    if not company:
+        raise ModelNotFoundException("Company", name)
+    return company
+
 def delete_company(company_id: int) -> None:
     company = get_company_by_id(company_id)
     db.session.delete(company)

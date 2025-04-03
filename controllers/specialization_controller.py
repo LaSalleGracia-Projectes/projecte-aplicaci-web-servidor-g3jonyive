@@ -19,7 +19,16 @@ def get_specialization_by_id(specialization_id):
         return make_error_response(e)
     except Exception as e:
         return make_error_response(InternalServerError(str(e)))
-    
+
+def search_specialization_by_name(name):
+    try:
+        specializations = service.search_specialization_by_name(name)
+        return [specialization.serialize() for specialization in specializations], 200
+    except ModelNotFoundException as e:
+        return make_error_response(e)
+    except Exception as e:
+        return make_error_response(InternalServerError(str(e)))
+
 def create_specialization(data):
     try:
         validated_data = validator.validate_add_specialization(data)

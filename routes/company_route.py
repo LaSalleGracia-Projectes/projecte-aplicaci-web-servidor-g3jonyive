@@ -16,6 +16,11 @@ def company_by_id(company_id):
     response, status = controller.get_company_by_id(company_id)
     return jsonify(response), status
 
+@company.route("/search/<string:company>", strict_slashes=False)
+def company_by_name(company):
+    response, status = controller.search_company_by_name(company)
+    return jsonify(response), status
+
 @company.route("/<int:company_id>", strict_slashes=False, methods=["DELETE"])
 def delete_company(company_id):
     response, status = controller.delete_company(company_id)

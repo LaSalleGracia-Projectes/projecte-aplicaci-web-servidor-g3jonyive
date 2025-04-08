@@ -56,10 +56,10 @@ def upload_user_image(username: str):
     response, status = controller.upload_user_image(username, image)
     return jsonify(response), status
 
-@user.route("/<string:username>/image", strict_slashes=False, methods=["GET"])
-def get_user_image(username: str):
+@user.route("/image/<int:image_id>", strict_slashes=False, methods=["GET"])
+def get_user_image(image_id: int):
     try:
-        image, status = controller.get_user_image(username)
+        image, status = controller.get_user_image(image_id)
         return Response(image.img, mimetype=image.mimetype), status
     except (ModelNotFoundException, BadRequestException) as e:
         return make_error_response(e)

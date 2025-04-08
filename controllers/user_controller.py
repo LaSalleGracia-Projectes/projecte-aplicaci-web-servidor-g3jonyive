@@ -1,3 +1,4 @@
+from flask import request
 from utils.utils import make_error_response, is_admin_token
 import services.user_service as service
 from models import User
@@ -89,7 +90,7 @@ def upload_user_image(username: str, image: FileStorage):
         if user.profile_picture:
             img_controller.delete_image(user.profile_picture)
         
-        user.profile_picture = img.id
+        user.profile_picture = f"{request.url_root}api/user/image/{img.id}"
         
         user = service.update_user(user)
         
@@ -99,10 +100,6 @@ def upload_user_image(username: str, image: FileStorage):
     except Exception as e:
         return make_error_response(InternalServerError(str(e)))
     
-def get_user_image(username: str):
-    user = service.get_user_by_username(username)
-    if not user.profile_picture:
-        raise ModelNotFoundException("Image", username)
-    
-    image = img_controller.get_image(user.profile_picture)
+def get_user_image(image_id: int):
+    image = img_controller.get_image(image_id)
     return image, 200

@@ -1,4 +1,4 @@
-from flask import request
+from flask import request, Response, jsonify
 from utils.utils import make_error_response, is_admin_token
 import services.user_service as service
 from models import User
@@ -101,5 +101,12 @@ def upload_user_image(username: str, image: FileStorage):
         return make_error_response(InternalServerError(str(e)))
     
 def get_user_image(image_id: int):
-    image = img_controller.get_image(image_id)
-    return image, 200
+    try:
+        image = img_controller.get_image(image_id)
+        return Response(image.img, mimetype=image.mimetype), 200
+    except (ModelNotFoundException, BadRequestException) as e:
+        error, status = make_error_response(e)
+        return jsonify(error), status
+    except Exception as e:
+        error, status = make_error_response(InternalServerError(str(e)))
+        return jsonify(error), status

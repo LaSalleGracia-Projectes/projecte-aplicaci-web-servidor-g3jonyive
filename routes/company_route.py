@@ -48,3 +48,13 @@ def update_company(company_id):
     response, status = controller.update_company(company_id, data)
     return jsonify(response), status
 
+@company.route("/<int:company_id>/image", strict_slashes=False, methods=["POST"])
+def upload_company_image(company_id: int):
+    image = request.files.get('image', None)
+    
+    response, status = controller.upload_company_image(company_id, image)
+    return jsonify(response), status
+
+@company.route("/image/<int:image_id>", strict_slashes=False, methods=["GET"])
+def get_company_image(image_id: int):
+    return controller.get_company_image(image_id)  

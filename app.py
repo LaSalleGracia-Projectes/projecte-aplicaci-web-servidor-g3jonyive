@@ -20,6 +20,7 @@ app.register_blueprint(post)
 app.register_blueprint(company)
 app.register_blueprint(like)
 app.register_blueprint(specialization)
+app.register_blueprint(image_bp)
 
 @app.before_request
 def create_tables():

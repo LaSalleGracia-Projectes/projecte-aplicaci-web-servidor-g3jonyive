@@ -11,3 +11,4 @@ from .comment import Comment
 from .company_user import CompanyUser
 from .payment import Payment
 from .specialization_user import SpecializationUser
+from .image import Image

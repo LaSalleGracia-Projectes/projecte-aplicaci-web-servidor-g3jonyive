@@ -78,7 +78,7 @@ def upload_company_image(company_id: str, image: FileStorage):
         img = img_controller.save_image(image, filename=company.name)
         
         if company.logo:
-            img_controller.delete_image(company.logo)
+            img_controller.delete_image(company.logo.split("/")[-1])
         
         company.logo = f"{request.url_root}api/company/image/{img.id}"
         

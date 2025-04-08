@@ -88,7 +88,7 @@ def upload_user_image(username: str, image: FileStorage):
             raise ModelNotFoundException("User", username)
         
         if user.profile_picture:
-            img_controller.delete_image(user.profile_picture)
+            img_controller.delete_image(user.profile_picture.split("/")[-1])
         
         user.profile_picture = f"{request.url_root}api/user/image/{img.id}"
         

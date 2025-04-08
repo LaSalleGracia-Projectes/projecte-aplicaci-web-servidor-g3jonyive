@@ -2,7 +2,7 @@ from werkzeug.utils import secure_filename
 from werkzeug.datastructures import FileStorage
 import services.image_service as service
 from models.image import Image
-from utils.exceptions import BadRequestException
+from utils.exceptions import BadRequestException, ModelNotFoundException
 from utils.constants import NO_IMAGE_PROVIDED, INVALID_IMAGE_FORMAT
 
 def save_image(image: FileStorage, filename: str = None) -> Image:
@@ -21,3 +21,10 @@ def save_image(image: FileStorage, filename: str = None) -> Image:
 def get_image(id: int) -> Image:
     image = service.get_image_by_id(id)
     return image
+
+def delete_image(id: int) -> None:
+    try:
+        image = service.get_image_by_id(id)
+    except ModelNotFoundException:
+        return None
+    return service.delete_image(image)

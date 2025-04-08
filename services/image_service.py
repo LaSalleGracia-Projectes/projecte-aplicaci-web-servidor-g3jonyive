@@ -13,3 +13,8 @@ def get_image_by_id(id: int) -> Image:
     if not image:
         raise ModelNotFoundException("Image", "image")
     return image
+
+def delete_image(img: Image) -> None:
+    db.session.delete(img)
+    db.session.commit()
+    return None

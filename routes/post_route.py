@@ -38,3 +38,14 @@ def update_post(post_id: str):
     
     response, status = controller.update_post(data, post_id)
     return jsonify(response), status
+
+@post.route("/<int:post_id>/image", strict_slashes=False, methods=["POST"])
+def upload_post_image(post_id: str):
+    image = request.files.get('image', None)
+    
+    response, status = controller.upload_post_image(post_id, image)
+    return jsonify(response), status
+
+@post.route("/image/<int:image_id>", strict_slashes=False, methods=["GET"])
+def get_post_image(image_id: int):
+    return controller.get_post_image(image_id)  

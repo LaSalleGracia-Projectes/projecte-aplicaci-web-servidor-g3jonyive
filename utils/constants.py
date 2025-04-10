@@ -5,6 +5,8 @@ INTERNAL_SERVER_ERROR = "Internal server error"
 METHOD_NOT_ALLOWED = "Method not allowed"
 UNAUTHORIZED_ERROR = "You are not authorized to access this resource"
 VALIDATION_ERROR = "Validation error"
+NO_IMAGE_PROVIDED = "No image provided"
+INVALID_IMAGE_FORMAT = "Invalid image format, must be jpeg, png or gif"
 # VALIDATIONS
 IS_REQUIRED = "The field is required"
 IS_NUMBER = "The field must be a number"

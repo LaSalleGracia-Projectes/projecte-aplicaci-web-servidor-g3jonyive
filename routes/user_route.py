@@ -1,7 +1,7 @@
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify, request, Response
 import controllers.user_controller as controller
 from utils.utils import make_error_response, need_json
-from utils.exceptions import BadRequestException
+from utils.exceptions import BadRequestException, ModelNotFoundException, InternalServerError
 
 
 user = Blueprint(name="user", import_name=__name__, url_prefix="/api/user")
@@ -48,3 +48,14 @@ def update_user(username: str):
     
     response, status = controller.update_user(username, data)
     return jsonify(response), status
+
+@user.route("/<string:username>/image", strict_slashes=False, methods=["POST"])
+def upload_user_image(username: str):
+    image = request.files.get('image', None)
+    
+    response, status = controller.upload_user_image(username, image)
+    return jsonify(response), status
+
+@user.route("/image/<int:image_id>", strict_slashes=False, methods=["GET"])
+def get_user_image(image_id: int):
+    return controller.get_user_image(image_id)    

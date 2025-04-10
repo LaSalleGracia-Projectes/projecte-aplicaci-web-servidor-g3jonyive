@@ -109,6 +109,15 @@ class Validator:
             return False, f'The post with id {value} does not exist'
         except Exception as e:
             return False, str(e)
+        
+    def exist_payment_method(self, value):
+        try:
+            payment_method_service.get_payment_method_by_id(value)
+            return True, ''
+        except ModelNotFoundException:
+            return False, f'The payment method with id {value} does not exist'
+        except Exception as e:
+            return False, str(e)
     
     def add_error(self, key: str, message: str):
         self.errors.append({key: message})

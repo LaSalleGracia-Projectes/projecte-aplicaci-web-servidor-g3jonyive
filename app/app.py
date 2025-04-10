@@ -21,6 +21,7 @@ app.register_blueprint(company)
 app.register_blueprint(like)
 app.register_blueprint(specialization)
 app.register_blueprint(payment)
+app.register_blueprint(payment_method)
 
 @app.before_request
 def create_tables():

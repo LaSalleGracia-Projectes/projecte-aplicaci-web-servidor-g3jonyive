@@ -7,7 +7,7 @@ def validate_add_payment(data: dict):
         "post_id": [Validator.is_required, Validator.is_number, Validator.exist_post],
         "amount": [Validator.is_required, Validator.is_number, Validator.positive_number],
         "payment_date": [Validator.is_date],
-        "payment_method_id": [Validator.is_required, Validator.is_number]
+        "payment_method_id": [Validator.is_required, Validator.is_number, Validator.exist_payment_method]
     }
 
     validator = Validator(data, validations)
@@ -21,7 +21,7 @@ def validate_add_payment(data: dict):
 def validate_update_payment(data: dict):
     validations = {
         "amount": [Validator.is_number, Validator.positive_number],
-        "payment_method_id": [Validator.is_number]
+        "payment_method_id": [Validator.is_number, Validator.exist_payment_method]
     }
 
     validator = Validator(data, validations)

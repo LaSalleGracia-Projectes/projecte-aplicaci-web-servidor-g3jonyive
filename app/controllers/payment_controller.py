@@ -56,7 +56,7 @@ def update_payment(payment_id: int, data: dict):
         return make_error_response(InternalServerError(str(e)))
 
 def delete_payment(payment_id: int):
-    try:
+    try:        
         service.delete_payment(payment_id)
         return '', 204
     except ModelNotFoundException as e:

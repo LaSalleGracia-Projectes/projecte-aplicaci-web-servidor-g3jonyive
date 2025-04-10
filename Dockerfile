@@ -9,7 +9,7 @@ COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copia el código de la aplicación
-COPY . .
+COPY ./app/ .
 
 RUN rm -rf /app/instance
 RUN rm -rf /app/.env*

@@ -11,7 +11,7 @@ def save_image(img: Image) -> Image:
 def get_image_by_id(id: int) -> Image:
     image = Image.query.get(id)
     if not image:
-        raise ModelNotFoundException("Image", "image")
+        raise ModelNotFoundException("Image", id)
     return image
 
 def delete_image(img: Image) -> None:

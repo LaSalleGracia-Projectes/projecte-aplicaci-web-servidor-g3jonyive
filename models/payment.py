@@ -10,6 +10,6 @@ class Payment(BaseModel):
     post_id = db.Column(db.Integer, db.ForeignKey('posts.id'), nullable=False)
     post = db.relationship('Post', backref='payments')
     amount = db.Column(db.Float, nullable=False)
-    payment_date = db.Column(db.Date, nullable=False)
+    payment_date = db.Column(db.DateTime, server_default=db.func.now())
     payment_method_id = db.Column(db.Integer, db.ForeignKey('payment_methods.id'), nullable=False)
     payment_method = db.relationship('PaymentMethod', backref='payments')

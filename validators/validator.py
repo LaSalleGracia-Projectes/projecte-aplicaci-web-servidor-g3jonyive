@@ -100,6 +100,15 @@ class Validator:
             return False, f'The user with id {value} does not exist'
         except Exception as e:
             return False, str(e)
+        
+    def exist_post(self, value):
+        try:
+            post_service.get_post_by_id(value)
+            return True, ''
+        except ModelNotFoundException:
+            return False, f'The post with id {value} does not exist'
+        except Exception as e:
+            return False, str(e)
     
     def add_error(self, key: str, message: str):
         self.errors.append({key: message})

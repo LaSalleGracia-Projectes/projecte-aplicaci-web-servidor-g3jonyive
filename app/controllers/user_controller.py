@@ -51,7 +51,7 @@ def delete_user(username: str):
     except (ModelNotFoundException, UnauthorizedException) as e:
         return make_error_response(e)
     except Exception as e:
-        return make_error_response(str(e), InternalServerError ,500)
+        return make_error_response(InternalServerError(str(e)))
 
 def update_user(username: str, data: dict):
     try:

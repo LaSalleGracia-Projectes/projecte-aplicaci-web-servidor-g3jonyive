@@ -8,6 +8,7 @@ click==8.1.7
 cloudscraper==1.2.71
 colorama==0.4.6
 cryptography==44.0.0
+Faker==37.1.0
 Flask==3.0.2
 Flask-Cors==5.0.0
 Flask-SQLAlchemy==3.1.1
@@ -49,6 +50,7 @@ six==1.16.0
 soupsieve==2.5
 SQLAlchemy==2.0.36
 typing_extensions==4.12.2
+tzdata==2025.2
 urllib3==1.26.20
 Werkzeug==3.0.2
 zipp==3.21.0

@@ -10,7 +10,10 @@ def log(tag: str = "[DEBUG]", message: str = "") -> None:
         print(f"{tag} {message}")
         
 def make_error_response(exception: Exception) -> dict:
-    return {"error": ERROR_RESPONSE, "details": exception.details, "exception": type(exception).__name__}, exception.status_code
+    error = {"error": ERROR_RESPONSE, "details": exception.details, "exception": type(exception).__name__}
+    if (hasattr(exception, 'validationError')):
+        error["validationError"] = exception.validationError
+    return error, exception.status_code
 
 def need_json(func):
     def wrapper(*args, **kwargs):

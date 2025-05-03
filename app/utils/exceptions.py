@@ -20,7 +20,8 @@ class ModelAlreadyExistsException(Exception):
         
 class ValidationError(Exception):
     def __init__(self, errors: dict = {}):
-        self.details = errors
+        self.details = VALIDATION_ERROR
+        self.validationError = errors
         self.status_code = 400
         super().__init__(VALIDATION_ERROR)
         

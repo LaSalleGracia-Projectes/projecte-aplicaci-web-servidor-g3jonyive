@@ -16,16 +16,10 @@ def get_all_users():
     
 def get_user_by_username(username: str):
     try:
-        user = service.get_user_by_username(username)
-        if not user:
-            raise ModelNotFoundException("User", username)
-        return user.serialize(), 200
-    except ModelNotFoundException as e:
-        return make_error_response(e)
-
-def get_user_by_uid(username: str):
-    try:
-        user = service.get_user_by_uid(username)
+        try:
+            user = service.get_user_by_username(username)
+        except ModelNotFoundException as e:
+            user = service.get_user_by_uid(username)
         if not user:
             raise ModelNotFoundException("User", username)
         return user.serialize(), 200

@@ -16,6 +16,11 @@ def username(username: str):
     response, status = controller.get_user_by_username(username)
     return jsonify(response), status
 
+@user.route("/<string:uid>", strict_slashes=False)
+def uid(uid: str):
+    response, status = controller.get_user_by_uid(uid)
+    return jsonify(response), status
+
 @user.route("/search/<string:username>", strict_slashes=False)
 def search_username(username: str):
     response, status = controller.search_user_by_username(username)

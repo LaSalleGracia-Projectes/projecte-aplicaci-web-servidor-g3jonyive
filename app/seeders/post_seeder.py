@@ -12,7 +12,7 @@ def seed_posts(posts=10):
             description=fake.text(),
             price=round(fake.random_number(digits=2, fix_len=True) + fake.random.random(), 2),
             user_id=fake.random_int(min=1, max=10),
-            photo=fake.image_url(),
+            photo="https://picsum.photos/200",
             company_id=fake.random_int(min=1, max=10),
             specialization_id=fake.random_int(min=1, max=10),
             created_at=fake.date_time_this_year()

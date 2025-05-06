@@ -9,7 +9,7 @@ def seed_companies(companies=10):
     for _ in range(companies):
         company = Company(
             name=fake.company(),
-            logo=fake.image_url(),
+            logo="https://picsum.photos/200",
             description=fake.text(),
         )
         add_company(company)

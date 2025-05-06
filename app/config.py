@@ -26,5 +26,7 @@ FIREBASECONFIG = {
     "measurementId": "G-GWGP24YMY7"
 }
 
+PATH = os.path.dirname(os.path.abspath(__file__))
+
 def date_now() -> datetime:
     return datetime.now(timezone(TIME_ZONE)).replace(tzinfo=None)

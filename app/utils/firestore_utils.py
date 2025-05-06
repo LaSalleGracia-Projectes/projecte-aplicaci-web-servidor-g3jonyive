@@ -8,10 +8,10 @@ firebase_admin.initialize_app(cred)
 db = firestore.client()
 userCollection = db.collection("users")
 
-def add_firestore_user(user_data):
+def add_firestore_user(user_data: dict):
     """Agrega un usuario a Firestore."""
     try:
-        userCollection.add(user_data)
+        userCollection.document(user_data["uid"]).set(user_data)
         print("Usuario agregado a Firestore.")
     except Exception as e:
         print(f"Error al agregar el usuario a Firestore: {e}")

@@ -28,13 +28,14 @@ def seed_users(users=10):
             username=username,
             birth_date=fake.date_of_birth(minimum_age=18, maximum_age=80),
             profile_picture=photoUrl,
-            phone=phone
+            phone=phone,
+            active=True
         )
         add_user(user)
         add_firestore_user(user_data)
-        
+
     print(f"Se han insertado {users} usuarios ficticios en la base de datos.")
-    
+
 def get_random_image(style="personas", size=200, format="png"):
     """Genera una URL de avatar aleatoria usando DiceBear."""
     random_seed = ''.join(str(random.randint(0, 9)) for _ in range(10))

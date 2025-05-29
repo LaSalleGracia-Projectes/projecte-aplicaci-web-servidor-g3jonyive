@@ -10,3 +10,4 @@ class User(BaseModel):
     birth_date = db.Column(db.Date, nullable=False)
     profile_picture = db.Column(db.String(255), nullable=True)
     phone = db.Column(db.String(255), nullable=True)
+    active = db.Column(db.Boolean, nullable=False, default=True)

@@ -1,11 +1,14 @@
 from faker import Faker
 from models.post import Post
 from services.post_service import add_post
+from utils.utils import log
 
 fake = Faker()
 
 def seed_posts(posts=10):
     """Genera publicaciones ficticias y las inserta en la base de datos."""
+    log(f"Iniciando la inserción de {posts} publicaciones ficticias...")
+    
     for _ in range(posts):
         post = Post(
             title=fake.sentence(),
@@ -19,4 +22,4 @@ def seed_posts(posts=10):
         )
         add_post(post)
 
-    print(f"Se han insertado {posts} publicaciones ficticias en la base de datos.")
+    log(f"Se han insertado {posts} publicaciones ficticias en la base de datos.")

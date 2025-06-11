@@ -3,11 +3,14 @@ from models.user import User
 from services.user_service import add_user
 import random
 from utils.firestore_utils import add_firestore_user
+from utils.utils import log
 
 fake = Faker()
 
 def seed_users(users=10):
     """Genera usuarios ficticios y los inserta en la base de datos."""
+    log(f"Iniciando la inserción de {users} usuarios ficticios...")
+    
     for _ in range(users):
         phone = f"{fake.random_int(min=600000000, max=699999999)}"
         photoUrl = get_random_image()
@@ -33,7 +36,7 @@ def seed_users(users=10):
         add_user(user)
         add_firestore_user(user_data)
         
-    print(f"Se han insertado {users} usuarios ficticios en la base de datos.")
+    log(f"Se han insertado {users} usuarios ficticios en la base de datos.")
     
 def get_random_image(style="personas", size=200, format="png"):
     """Genera una URL de avatar aleatoria usando DiceBear."""
